@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - https://raw.githubusercontent.com/ray-project/kuberay/master/ray-operator/config/samples/vllm/ray-service.vllm.yaml
+
+patches:
+  - path: add-ray-worker-toleration.yaml
+    target:
+      kind: RayService
+      name: llama-3-8b
+  - path: patch-headgroup.yaml
+    target:
+      kind: RayService
+      name: llama-3-8b

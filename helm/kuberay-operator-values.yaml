@@ -1,0 +1,9 @@
+# helm/kuberay-operator-values.yaml
+tolerations:
+  - key: "role"
+    operator: "Equal"
+    value: "ray-head"
+    effect: "NoSchedule"
+
+nodeSelector:
+  role: ray-head          # lands on the tainted node, even if the taint disappears

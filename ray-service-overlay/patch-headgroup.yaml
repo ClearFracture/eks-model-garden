@@ -1,0 +1,19 @@
+# toleration
+- op: add
+  path: /spec/rayClusterConfig/headGroupSpec/template/spec/tolerations
+  value:
+    - key: "role"
+      operator: "Equal"
+      value: "ray-head"
+      effect: "NoSchedule"
+
+# shrink resources from 2 CPU/8 GiB → 1.5 CPU/6 GiB
+- op: replace
+  path: /spec/rayClusterConfig/headGroupSpec/template/spec/containers/0/resources
+  value:
+    limits:
+      cpu: "1.5"
+      memory: "6Gi"
+    requests:
+      cpu: "1.5"
+      memory: "6Gi"

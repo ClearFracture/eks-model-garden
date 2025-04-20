@@ -1,0 +1,22 @@
+# Adds a second toleration entry to the first workerGroupSpec
+- op: add
+  path: /spec/rayClusterConfig/workerGroupSpecs/0/template/spec/tolerations/-
+  value:
+    key: "role"
+    operator: "Equal"
+    value: "ray-worker"
+    effect: "NoSchedule"
+
+# ↓ Append a new env entry
+- op: add
+  path: /spec/rayClusterConfig/workerGroupSpecs/0/template/spec/containers/0/env/-
+  value:
+    name: TENSOR_PARALLELISM
+    value: "1"
+
+
+- op: replace
+  path: /spec/rayClusterConfig/workerGroupSpecs/0/template/spec/containers/0/resources
+  value:
+    limits:   {cpu: "8", memory: "20Gi", nvidia.com/gpu: "1"}
+    requests: {cpu: "8", memory: "20Gi", nvidia.com/gpu: "1"}
