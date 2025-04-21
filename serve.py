@@ -70,7 +70,9 @@ class VLLMDeployment:
             else:
                 base_model_paths = [self.engine_args.model]
 
-            models = OpenAIServingModels.from_model_paths(
+            models = OpenAIServingModels(
+                engine_client=self.engine,
+                model_config=model_config,
                 base_model_paths=base_model_paths,
                 lora_modules=self.lora_modules,
                 prompt_adapters=self.prompt_adapters,

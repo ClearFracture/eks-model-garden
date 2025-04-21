@@ -68,3 +68,16 @@ kubectl apply -k ray-service‑overlay/
 ```bash
 docker build -t 891377002699.dkr.ecr.us-east-2.amazonaws.com/clearfracture/ray-vllm:latest ray-vllm-cu121
 ```
+
+### Ray Dashboard
+```bash
+kubectl port-forward <head node> 8265:8265
+```
+http://localhost:8265/#/serve/applications/llm/VLLMDeployment?replicaId=0v521ryh
+
+
+### curl from local machine
+```bash
+kubectl port-forward svc/llama-3-8b-serve-svc 8000
+```
+
