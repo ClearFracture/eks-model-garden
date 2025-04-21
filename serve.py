@@ -21,7 +21,8 @@ from vllm.entrypoints.openai.serving_chat import OpenAIServingChat
 from vllm.entrypoints.openai.serving_models import (
     LoRAModulePath,
     PromptAdapterPath,
-    OpenAIServingModels
+    OpenAIServingModels,
+    BaseModelPath
 )
 from vllm.utils import FlexibleArgumentParser
 from vllm.entrypoints.logger import RequestLogger
@@ -66,9 +67,11 @@ class VLLMDeployment:
             model_config = await self.engine.get_model_config()
 
             if self.engine_args.served_model_name is not None:
-                base_model_paths = [self.engine_args.served_model_name]
+                base_model_paths = [BaseModelPath(name=self.engine_args.served_model_name,
+                                                  model_path=self.engine_args.served_model_name)]
             else:
-                base_model_paths = [self.engine_args.model]
+                base_model_paths = [BaseModelPath(name=self.engine_args.model,
+                                                  model_path=self.engine_args.model)]
 
             models = OpenAIServingModels(
                 engine_client=self.engine,
