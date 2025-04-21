@@ -81,3 +81,14 @@ http://localhost:8265/#/serve/applications/llm/VLLMDeployment?replicaId=0v521ryh
 kubectl port-forward svc/llama-3-8b-serve-svc 8000
 ```
 
+### test query
+```bash
+curl http://localhost:8000/v1/chat/completions -H "Content-Type: application/json" -d '{
+      "model": "meta-llama/Meta-Llama-3-8B-Instruct",
+      "messages": [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Provide a brief sentence describing the Ray open-source project."}
+      ],
+      "temperature": 0.7
+    }'
+```
