@@ -29,13 +29,13 @@ eksctl create nodegroup \
 ```
 
 ### Add GPU nodegroup for Ray Worker Node
-- A g5.8xlarge costs $2.448 per hour
+- A g5.12xlarge costs $5.672 per hour
 - NVIDIA A10G Tensor Core GPU
 ```bash
 eksctl create nodegroup \
   --cluster=clear-fracture-public-cluster \
   --name=ray-worker \
-  --instance-types=g5.8xlarge \
+  --instance-types=g5.12xlarge \
   --nodes=1 \
   --nodes-min=1 \
   --nodes-max=4 \

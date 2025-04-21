@@ -8,15 +8,15 @@
     effect: "NoSchedule"
 
 # ↓ Append a new env entry
-- op: add
-  path: /spec/rayClusterConfig/workerGroupSpecs/0/template/spec/containers/0/env/-
-  value:
-    name: TENSOR_PARALLELISM
-    value: "1"
+# - op: add
+#   path: /spec/rayClusterConfig/workerGroupSpecs/0/template/spec/containers/0/env/-
+#   value:
+#     name: TENSOR_PARALLELISM
+#     value: "1"
 
 
-- op: replace
-  path: /spec/rayClusterConfig/workerGroupSpecs/0/template/spec/containers/0/resources
-  value:
-    limits:   {cpu: "8", memory: "20Gi", nvidia.com/gpu: "1"}
-    requests: {cpu: "8", memory: "20Gi", nvidia.com/gpu: "1"}
+# - op: replace
+#   path: /spec/rayClusterConfig/workerGroupSpecs/0/template/spec/containers/0/resources
+#   value:
+#     limits:   {cpu: "8", memory: "20Gi", nvidia.com/gpu: "1"}
+#     requests: {cpu: "8", memory: "20Gi", nvidia.com/gpu: "1"}

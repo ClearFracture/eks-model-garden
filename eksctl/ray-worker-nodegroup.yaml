@@ -3,7 +3,7 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 managedNodeGroups:
 - amiFamily: AmazonLinux2
-  desiredCapacity: 2
+  desiredCapacity: 1
   disableIMDSv1: true
   disablePodIMDS: false
   iam:
@@ -23,7 +23,7 @@ managedNodeGroups:
       xRay: false
   instanceSelector: {}
   instanceTypes:
-  - g5.8xlarge
+  - g5.12xlarge
   labels:
     alpha.eksctl.io/cluster-name: clear-fracture-public-cluster
     alpha.eksctl.io/nodegroup-name: ray-worker

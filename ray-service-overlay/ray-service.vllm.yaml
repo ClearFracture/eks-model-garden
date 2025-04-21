@@ -16,10 +16,11 @@ spec:
           # NOTE: num_gpus is set automatically based on TENSOR_PARALLELISM
       runtime_env:
         working_dir: "https://github.com/ray-project/kuberay/archive/master.zip"
-        pip: ["vllm==0.6.1.post2"]
+        pip:
+          - vllm==0.8.4
         env_vars:
           MODEL_ID: "meta-llama/Meta-Llama-3-8B-Instruct"
-          TENSOR_PARALLELISM: "1"
+          TENSOR_PARALLELISM: "2"
           PIPELINE_PARALLELISM: "1"
   rayClusterConfig:
     headGroupSpec:
