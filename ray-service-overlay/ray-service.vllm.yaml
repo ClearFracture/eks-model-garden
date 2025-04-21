@@ -7,7 +7,7 @@ spec:
     applications:
     - name: llm
       route_prefix: /
-      import_path:  ray-operator.config.samples.vllm.serve:model
+      import_path:  serve:model
       deployments:
       - name: VLLMDeployment
         num_replicas: 1
@@ -15,7 +15,7 @@ spec:
           num_cpus: 8
           # NOTE: num_gpus is set automatically based on TENSOR_PARALLELISM
       runtime_env:
-        working_dir: "https://github.com/ray-project/kuberay/archive/master.zip"
+        working_dir: "https://github.com/ClearFracture/eks-model-garden/archive/refs/heads/main.zip"
         pip: []
         env_vars:
           MODEL_ID: "meta-llama/Meta-Llama-3-8B-Instruct"
