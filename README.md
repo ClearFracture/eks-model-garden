@@ -64,3 +64,7 @@ helm upgrade --install kuberay-operator kuberay/kuberay-operator \
 ```bash
 kubectl apply -k ray-service‑overlay/
 ```
+### Build ray-vllm image
+```bash
+docker build -t 891377002699.dkr.ecr.us-east-2.amazonaws.com/clearfracture/ray-vllm:latest ray-vllm-cu121
+```

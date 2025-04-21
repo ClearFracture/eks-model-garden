@@ -16,8 +16,7 @@ spec:
           # NOTE: num_gpus is set automatically based on TENSOR_PARALLELISM
       runtime_env:
         working_dir: "https://github.com/ray-project/kuberay/archive/master.zip"
-        pip:
-          - vllm==0.8.4
+        pip: []
         env_vars:
           MODEL_ID: "meta-llama/Meta-Llama-3-8B-Instruct"
           TENSOR_PARALLELISM: "2"
@@ -30,7 +29,7 @@ spec:
         spec:
           containers:
           - name: ray-head
-            image: rayproject/ray-ml:2.33.0.914af0-py311
+            image: 891377002699.dkr.ecr.us-east-2.amazonaws.com/clearfracture/ray-vllm:latest
             resources:
               limits:
                 cpu: "2"
@@ -54,7 +53,7 @@ spec:
         spec:
           containers:
           - name: llm
-            image: rayproject/ray-ml:2.33.0.914af0-py311
+            image: 891377002699.dkr.ecr.us-east-2.amazonaws.com/clearfracture/ray-vllm:latest
             env:
             - name: HUGGING_FACE_HUB_TOKEN
               valueFrom:
