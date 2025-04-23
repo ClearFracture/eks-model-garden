@@ -16,8 +16,11 @@ from vllm.entrypoints.openai.protocol import (
     ChatCompletionRequest,
     ChatCompletionResponse,
     ErrorResponse,
+    EmbeddingRequest,
+    EmbeddingResponse,
 )
 from vllm.entrypoints.openai.serving_chat import OpenAIServingChat
+from vllm.entrypoints.openai.serving_embedding import OpenAIServingEmbedding
 from vllm.entrypoints.openai.serving_models import (
     LoRAModulePath,
     PromptAdapterPath,
@@ -29,11 +32,32 @@ from vllm.entrypoints.logger import RequestLogger
 
 logger = logging.getLogger("ray.serve")
 
-app = FastAPI()
+chat_app = FastAPI()
+embed_app = FastAPI()
 
 
+def parse_vllm_args(cli_args: Dict[str, str]):
+    """Parses vLLM args based on CLI inputs.
+
+    Currently uses argparse because vLLM doesn't expose Python models for all of the
+    config options we want to support.
+    """
+    arg_parser = FlexibleArgumentParser(
+        description="vLLM OpenAI-Compatible RESTful API server."
+    )
+
+    parser = make_arg_parser(arg_parser)
+    arg_strings = []
+    for key, value in cli_args.items():
+        arg_strings.extend([f"--{key}", str(value)])
+    logger.info(arg_strings)
+    parsed_args = parser.parse_args(args=arg_strings)
+    return parsed_args
+
+
+# Chat Completion Application
 @serve.deployment(name="VLLMDeployment")
-@serve.ingress(app)
+@serve.ingress(chat_app)
 class VLLMDeployment:
     def __init__(
         self,
@@ -54,7 +78,7 @@ class VLLMDeployment:
         self.chat_template = chat_template
         self.engine = AsyncLLMEngine.from_engine_args(engine_args)
 
-    @app.post("/v1/chat/completions")
+    @chat_app.post("/v1/chat/completions")
     async def create_chat_completion(
         self, request: ChatCompletionRequest, raw_request: Request
     ):
@@ -68,10 +92,10 @@ class VLLMDeployment:
 
             if self.engine_args.served_model_name is not None:
                 base_model_paths = [BaseModelPath(name=self.engine_args.served_model_name,
-                                                  model_path=self.engine_args.served_model_name)]
+                                                model_path=self.engine_args.served_model_name)]
             else:
                 base_model_paths = [BaseModelPath(name=self.engine_args.model,
-                                                  model_path=self.engine_args.model)]
+                                                model_path=self.engine_args.model)]
 
             models = OpenAIServingModels(
                 engine_client=self.engine,
@@ -106,33 +130,35 @@ class VLLMDeployment:
             return JSONResponse(content=generator.model_dump())
 
 
-def parse_vllm_args(cli_args: Dict[str, str]):
-    """Parses vLLM args based on CLI inputs.
+# Embedding Application
+@serve.deployment(name="VLLMEmbeddingDeployment")
+@serve.ingress(embed_app)
+class VLLMEmbeddingDeployment:
+    def __init__(self, engine_args: AsyncEngineArgs):
+        logger.info(f"Starting embedding engine with args: {engine_args}")
+        self.engine_args = engine_args
+        self.engine = AsyncLLMEngine.from_engine_args(engine_args)
+        self.openai_serving_embedding = None
 
-    Currently uses argparse because vLLM doesn't expose Python models for all of the
-    config options we want to support.
-    """
-    arg_parser = FlexibleArgumentParser(
-        description="vLLM OpenAI-Compatible RESTful API server."
-    )
+    @embed_app.post("/v1/embeddings")
+    async def create_embedding(self, request: EmbeddingRequest, raw_request: Request):
+        if not self.openai_serving_embedding:
+            model_config = await self.engine.get_model_config()
 
-    parser = make_arg_parser(arg_parser)
-    arg_strings = []
-    for key, value in cli_args.items():
-        arg_strings.extend([f"--{key}", str(value)])
-    logger.info(arg_strings)
-    parsed_args = parser.parse_args(args=arg_strings)
-    return parsed_args
+            self.openai_serving_embedding = OpenAIServingEmbedding(
+                engine_client=self.engine,
+                model_config=model_config,
+            )
+
+        logger.info(f"Embedding Request: {request}")
+        response = await self.openai_serving_embedding.create_embedding(
+            request, raw_request
+        )
+        return JSONResponse(content=response.model_dump())
 
 
-def build_app(cli_args: Dict[str, str]) -> serve.Application:
-    """Builds the Serve app based on CLI arguments.
-
-    See https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html#command-line-arguments-for-the-server
-    for the complete set of arguments.
-
-    Supported engine arguments: https://docs.vllm.ai/en/latest/models/engine_args.html.
-    """  # noqa: E501
+def build_chat_app(cli_args: Dict[str, str]) -> serve.Application:
+    """Builds the Chat Serve application."""
     parsed_args = parse_vllm_args(cli_args)
     engine_args = AsyncEngineArgs.from_cli_args(parsed_args)
     engine_args.worker_use_ray = True
@@ -147,5 +173,26 @@ def build_app(cli_args: Dict[str, str]) -> serve.Application:
     )
 
 
-model = build_app(
-    {"model": os.environ['MODEL_ID'], "tensor-parallel-size": os.environ['TENSOR_PARALLELISM'], "pipeline-parallel-size": os.environ['PIPELINE_PARALLELISM']})
+def build_embedding_app(cli_args: Dict[str, str]) -> serve.Application:
+    """Builds the Embedding Serve application."""
+    parsed_args = parse_vllm_args(cli_args)
+    engine_args = AsyncEngineArgs.from_cli_args(parsed_args)
+    engine_args.worker_use_ray = True
+    engine_args.task = "embed"  # Force task to embed for embedding model
+
+    return VLLMEmbeddingDeployment.bind(engine_args)
+
+
+# Create the chat model application by default
+model_args = {
+    "model": os.environ['MODEL_ID'], 
+    "tensor-parallel-size": os.environ['TENSOR_PARALLELISM'], 
+    "pipeline-parallel-size": os.environ['PIPELINE_PARALLELISM']
+}
+
+# For backwards compatibility, keep the default 'model' export
+model = build_chat_app(model_args)
+
+# Also export named applications for direct import in RayService config
+chat_model = build_chat_app(model_args)
+embedding_model = build_embedding_app(model_args)
