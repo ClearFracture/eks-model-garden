@@ -145,9 +145,30 @@ class VLLMEmbeddingDeployment:
         if not self.openai_serving_embedding:
             model_config = await self.engine.get_model_config()
 
+            # Create base model paths similar to chat deployment
+            if self.engine_args.served_model_name is not None:
+                base_model_paths = [BaseModelPath(name=self.engine_args.served_model_name,
+                                                model_path=self.engine_args.served_model_name)]
+            else:
+                base_model_paths = [BaseModelPath(name=self.engine_args.model,
+                                                model_path=self.engine_args.model)]
+            
+            # Create models instance
+            models = OpenAIServingModels(
+                engine_client=self.engine,
+                model_config=model_config,
+                base_model_paths=base_model_paths,
+                lora_modules=None,
+                prompt_adapters=None,
+            )
+
             self.openai_serving_embedding = OpenAIServingEmbedding(
                 engine_client=self.engine,
                 model_config=model_config,
+                models=models,
+                request_logger=None,
+                chat_template=None,
+                chat_template_content_format="auto",
             )
 
         logger.info(f"Embedding Request: {request}")
