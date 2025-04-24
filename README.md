@@ -81,7 +81,7 @@ http://localhost:8265/#/serve/applications/llm/VLLMDeployment?replicaId=0v521ryh
 kubectl port-forward svc/llama-3-8b-serve-svc 8000
 ```
 
-### test query
+### test query for chat
 ```bash
 curl http://localhost:8000/v1/chat/completions -H "Content-Type: application/json" -d '{
       "model": "meta-llama/Meta-Llama-3-8B-Instruct",
@@ -91,4 +91,31 @@ curl http://localhost:8000/v1/chat/completions -H "Content-Type: application/jso
       ],
       "temperature": 0.7
     }'
+```
+
+### test query for embedding
+```bash
+curl http://localhost:8000/embed/v1/embeddings -H "Content-Type: application/json" -d '{
+  "model": "intfloat/e5-mistral-7b-instruct",
+  "input": "This is a sample text to create embeddings for."
+}'
+```
+
+### associate eks with iam oidc provider
+```bash
+eksctl utils associate-iam-oidc-provider \
+    --region us-east-2 \
+    --cluster clear-fracture-public-cluster \
+    --approve
+```
+
+
+### add iam role for bedrock access
+```bash
+eksctl create iamserviceaccount \
+  --name bedrock-invoke-sa \
+  --namespace default \
+  --cluster clear-fracture-public-cluster \
+  --attach-policy-arn arn:aws:iam::891377002699:policy/BedrockInvokePolicy \
+  --approve
 ```

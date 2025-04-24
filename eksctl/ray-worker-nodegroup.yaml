@@ -28,7 +28,7 @@ managedNodeGroups:
     alpha.eksctl.io/cluster-name: clear-fracture-public-cluster
     alpha.eksctl.io/nodegroup-name: ray-worker
   maxSize: 4
-  minSize: 1
+  minSize: 0
   taints:
     - key: "role"
       value: "ray-worker"

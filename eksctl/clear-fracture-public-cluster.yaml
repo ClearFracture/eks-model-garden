@@ -37,10 +37,10 @@ managedNodeGroups:
   instanceSelector: {}
   labels:
     alpha.eksctl.io/cluster-name: clear-fracture-public-cluster
-    alpha.eksctl.io/nodegroup-name: ng-83d41768
+    alpha.eksctl.io/nodegroup-name: default
   maxSize: 2
-  minSize: 2
-  name: ng-83d41768
+  minSize: 1
+  name: default
   privateNetworking: false
   releaseVersion: ""
   securityGroups:
@@ -50,7 +50,7 @@ managedNodeGroups:
     allow: false
     publicKeyPath: ""
   tags:
-    alpha.eksctl.io/nodegroup-name: ng-83d41768
+    alpha.eksctl.io/nodegroup-name: default
     alpha.eksctl.io/nodegroup-type: managed
   volumeIOPS: 3000
   volumeSize: 80

@@ -1,0 +1,25 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: llm-chat
+spec:
+  type: bindings.http
+  version: v1
+  metadata:
+  - name: url
+    value: http://llama-3-8b-serve-svc:8000/v1/chat/completions
+  - name: method
+    value: POST
+---
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: embedding-service
+spec:
+  type: bindings.http
+  version: v1
+  metadata:
+  - name: url
+    value: http://llama-3-8b-serve-svc:8000/embed/v1/embeddings
+  - name: method
+    value: POST
