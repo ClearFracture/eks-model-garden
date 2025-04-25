@@ -1,0 +1,17 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: llm-chat
+spec:
+  metadata:
+  - name: url
+    value: http://llama-3-8b-serve-svc:8000/v1/chat/completions
+---
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: embedding-service
+spec:
+  metadata:
+  - name: url
+    value: http://llama-3-8b-serve-svc:8000/embed/v1/embeddings

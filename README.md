@@ -73,7 +73,7 @@ docker build -t 891377002699.dkr.ecr.us-east-2.amazonaws.com/clearfracture/ray-v
 ```bash
 kubectl port-forward <head node> 8265:8265
 ```
-http://localhost:8265/#/serve/applications/llm/VLLMDeployment?replicaId=0v521ryh
+http://localhost:8265/#/overview
 
 
 ### curl from local machine
@@ -118,4 +118,16 @@ eksctl create iamserviceaccount \
   --cluster clear-fracture-public-cluster \
   --attach-policy-arn arn:aws:iam::891377002699:policy/BedrockInvokePolicy \
   --approve
+```
+
+
+### test the bedrock proxy
+```bash
+kubectl port-forward svc/bedrock-proxy-svc 8000:8000
+curl -X POST http://localhost:8000/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "How can I build a Kubernetes operator?",
+    "model_id": "meta.llama3-8b-instruct-v1:0"
+  }'
 ```

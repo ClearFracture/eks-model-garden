@@ -1,0 +1,17 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: llm-chat
+spec:
+  metadata:
+  - name: url
+    value: http://bedrock-proxy-svc:8000/chat
+---
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: embedding-service
+spec:
+  metadata:
+  - name: url
+    value: http://bedrock-proxy-svc:8000/embed
