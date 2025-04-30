@@ -41,6 +41,36 @@ kubectl apply -k ray-model-garden/
 docker build -t 891377002699.dkr.ecr.us-east-2.amazonaws.com/clearfracture/ray-vllm:latest ray-vllm-cu121
 ```
 
+### Deploy Dapr Emulator Proxy
+
+The dapr-emulator-proxy is a lightweight service that acts as a bridge between external HTTP requests and the Dapr sidecar within Kubernetes pods. It enables applications to interact with Dapr bindings through a simple HTTP interface without needing to deploy into a kubernetes pod with a dapr sidecar. Specifically applications can be developed outside of k8's and outside of a container.
+
+#### What it does:
+- Forwards external HTTP requests to the Dapr sidecar running in the same pod
+- Provides a compatible interface for services that need to access Dapr bindings
+- Enables testing and development with Dapr bindings without direct integration
+
+#### Deployment:
+```bash
+# Deploy to Kubernetes
+kubectl apply -f dapr-emulator-proxy/dapr-emulator-proxy.yaml
+```
+
+#### Testing the deployment:
+Create a temporary pod to test the embedding service:
+```bash
+kubectl run curl-test --image=curlimages/curl --rm -it --restart=Never -- curl -v http://dapr-emulator-proxy/v1.0/bindings/embedding-service -H "Content-Type: application/json" -d '{"operation": "post", "data": {"model": "intfloat/e5-mistral-7b-instruct", "input": "Hello, how are you?"}, "metadata": {"Content-Type": "application/json"}}'
+```
+
+Test the LLM chat service:
+```bash
+kubectl run curl-test --image=curlimages/curl --rm -it --restart=Never -- curl -v http://dapr-emulator-proxy/v1.0/bindings/llm-chat -H "Content-Type: application/json" -d '{"operation": "post", "data": {"model": "anthropic.claude-3-sonnet-20240229", "prompt": "Hello, how are you today?"}, "metadata": {"Content-Type": "application/json"}}'
+```
+
+#### Future improvements:
+**Adding Ingress:**
+The current deployment uses a ClusterIP service which is only accessible within the Kubernetes cluster. To make it externally accessible, we need to update the service type to LoadBalancer or set up an Ingress.
+
 ### Ray Dashboard
 ```bash
 kubectl port-forward <head node> 8265:8265
