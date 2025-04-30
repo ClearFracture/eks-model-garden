@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dapr-emulator-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: dapr-emulator-proxy }
+  template:
+    metadata:
+      labels: { app: dapr-emulator-proxy }
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "dapr-emulator-proxy"
+        dapr.io/app-port: "8000"     # FastAPI port
+    spec:
+      containers:
+        - name: proxy
+          image: 891377002699.dkr.ecr.us-east-2.amazonaws.com/clearfracture/dapr-emulator-proxy:latest
+          ports: [{ containerPort: 8000 }]
+          env:
+            - name: DAPR_HOST
+              value: "http://localhost:3500"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dapr-emulator-proxy
+spec:
+  type: ClusterIP   # change to LoadBalancer or expose via Ingress
+  selector:
+    app: dapr-emulator-proxy
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
