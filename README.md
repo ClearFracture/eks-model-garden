@@ -78,7 +78,7 @@ http://localhost:8265/#/overview
 
 ### curl from local machine
 ```bash
-kubectl port-forward svc/llama-3-8b-serve-svc 8000
+kubectl port-forward svc/ray-model-garden-serve-svc 8000
 ```
 
 ### test query for chat

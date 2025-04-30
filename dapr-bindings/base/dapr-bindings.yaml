@@ -7,7 +7,7 @@ spec:
   version: v1
   metadata:
   - name: url
-    value: http://llama-3-8b-serve-svc:8000/v1/chat/completions
+    value: http://ray-model-garden-serve-svc:8000/v1/chat/completions
   - name: method
     value: POST
 ---
@@ -20,6 +20,6 @@ spec:
   version: v1
   metadata:
   - name: url
-    value: http://llama-3-8b-serve-svc:8000/embed/v1/embeddings
+    value: http://ray-model-garden-serve-svc:8000/embed/v1/embeddings
   - name: method
     value: POST

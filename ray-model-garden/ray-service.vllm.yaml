@@ -1,7 +1,7 @@
 apiVersion: ray.io/v1
 kind: RayService
 metadata:
-  name: llama-3-8b
+  name: ray-model-garden
 spec:
   serveConfigV2: |
     applications:
