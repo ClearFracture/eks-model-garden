@@ -28,7 +28,7 @@ helm repo add kuberay https://ray-project.github.io/kuberay-helm
 helm repo update
 helm upgrade --install kuberay-operator kuberay/kuberay-operator \
   --version 1.3.0 \
-  -f helm/kuberay-operator-values.yaml
+  # -f helm/kuberay-operator-values.yaml # no longer need to deploy kuberay-operator on specific node.
 ```
 
 ### Apply patches to ray service
