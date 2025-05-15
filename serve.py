@@ -208,7 +208,8 @@ def build_embedding_app(cli_args: Dict[str, str]) -> serve.Application:
 model_args = {
     "model": os.environ['MODEL_ID'], 
     "tensor-parallel-size": os.environ['TENSOR_PARALLELISM'], 
-    "pipeline-parallel-size": os.environ['PIPELINE_PARALLELISM']
+    "pipeline-parallel-size": os.environ['PIPELINE_PARALLELISM'],
+    "dtype": "float16"
 }
 
 # For backwards compatibility, keep the default 'model' export
