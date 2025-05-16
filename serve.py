@@ -49,7 +49,12 @@ def parse_vllm_args(cli_args: Dict[str, str]):
     parser = make_arg_parser(arg_parser)
     arg_strings = []
     for key, value in cli_args.items():
-        arg_strings.extend([f"--{key}", str(value)])
+        if isinstance(value, bool) and value:
+            arg_strings.append(f"--{key}")
+        elif isinstance(value, str) and value.lower() == "true":
+            arg_strings.append(f"--{key}")
+        elif value is not None:
+            arg_strings.extend([f"--{key}", str(value)])
     logger.info(arg_strings)
     parsed_args = parser.parse_args(args=arg_strings)
     return parsed_args
@@ -210,7 +215,7 @@ model_args = {
     "tensor-parallel-size": os.environ['TENSOR_PARALLELISM'], 
     "pipeline-parallel-size": os.environ['PIPELINE_PARALLELISM'],
     "dtype": os.environ.get('DTYPE', 'float16'),
-    "enable-auto-tool-choice": "true"
+    "enable-auto-tool-choice": ""
 }
 
 # For backwards compatibility, keep the default 'model' export
