@@ -22,8 +22,6 @@ spec:
           TENSOR_PARALLELISM: "2"
           PIPELINE_PARALLELISM: "1"
           DTYPE: "float16"
-          ENABLE_AUTO_TOOL_CHOICE: "true"
-          TOOL_CALL_PARSER: "true"
     
     - name: embeddings
       route_prefix: /embed
