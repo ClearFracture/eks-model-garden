@@ -216,7 +216,7 @@ model_args = {
     "pipeline-parallel-size": os.environ['PIPELINE_PARALLELISM'],
     "dtype": os.environ.get('DTYPE', 'float16'),
     "enable-auto-tool-choice": "",
-    "tool-call-parser": ""
+    "tool-call-parser": "llama3_json"
 }
 
 # For backwards compatibility, keep the default 'model' export
