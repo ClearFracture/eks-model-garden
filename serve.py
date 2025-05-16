@@ -215,7 +215,8 @@ model_args = {
     "tensor-parallel-size": os.environ['TENSOR_PARALLELISM'], 
     "pipeline-parallel-size": os.environ['PIPELINE_PARALLELISM'],
     "dtype": os.environ.get('DTYPE', 'float16'),
-    "enable-auto-tool-choice": ""
+    "enable-auto-tool-choice": "",
+    "tool-call-parser": ""
 }
 
 # For backwards compatibility, keep the default 'model' export
