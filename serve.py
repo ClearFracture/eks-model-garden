@@ -217,12 +217,12 @@ model_args = {
     "dtype": os.environ.get('DTYPE', 'float16'),
     "enable-auto-tool-choice": True,
     "tool-call-parser": "llama3_json",
-    "chat-template": "tool_chat_template_llama3.1_json.jinja"
+    # "chat-template": "tool_chat_template_llama3.1_json.jinja"
 }
 
 # For backwards compatibility, keep the default 'model' export
-model = build_chat_app(model_args)
+# model = build_chat_app(model_args)
 
 # Also export named applications for direct import in RayService config
 chat_model = build_chat_app(model_args)
-embedding_model = build_embedding_app(model_args)
+# embedding_model = build_embedding_app(model_args)

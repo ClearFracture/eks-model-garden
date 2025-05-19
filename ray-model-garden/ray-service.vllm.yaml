@@ -23,23 +23,23 @@ spec:
           PIPELINE_PARALLELISM: "1"
           DTYPE: "float16"
     
-    - name: embeddings
-      route_prefix: /embed
-      import_path: serve:embedding_model
-      deployments:
-      - name: VLLMEmbeddingDeployment
-        num_replicas: 1
-        ray_actor_options:
-          num_cpus: 8
-          # NOTE: num_gpus is set automatically based on TENSOR_PARALLELISM
-      runtime_env:
-        working_dir: "https://github.com/ClearFracture/eks-model-garden/archive/refs/heads/add-tool-calling-to-engine-args.zip"
-        pip: []
-        env_vars:
-          MODEL_ID: "intfloat/e5-mistral-7b-instruct"
-          TENSOR_PARALLELISM: "2"
-          PIPELINE_PARALLELISM: "1"
-          DTYPE: "float16"
+    # - name: embeddings
+    #   route_prefix: /embed
+    #   import_path: serve:embedding_model
+    #   deployments:
+    #   - name: VLLMEmbeddingDeployment
+    #     num_replicas: 1
+    #     ray_actor_options:
+    #       num_cpus: 8
+    #       # NOTE: num_gpus is set automatically based on TENSOR_PARALLELISM
+    #   runtime_env:
+    #     working_dir: "https://github.com/ClearFracture/eks-model-garden/archive/refs/heads/add-tool-calling-to-engine-args.zip"
+    #     pip: []
+    #     env_vars:
+    #       MODEL_ID: "intfloat/e5-mistral-7b-instruct"
+    #       TENSOR_PARALLELISM: "2"
+    #       PIPELINE_PARALLELISM: "1"
+    #       DTYPE: "float16"
   rayClusterConfig:
     headGroupSpec:
       rayStartParams:
