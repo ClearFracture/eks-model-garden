@@ -217,7 +217,7 @@ model_args = {
     "dtype": os.environ.get('DTYPE', 'float16'),
     "enable-auto-tool-choice": True,
     "tool-call-parser": "llama3_json",
-    # "chat-template": "tool_chat_template_llama3.1_json.jinja"
+    "chat-template": "tool_chat_template_llama3.1_json.jinja"
 }
 
 # For backwards compatibility, keep the default 'model' export
