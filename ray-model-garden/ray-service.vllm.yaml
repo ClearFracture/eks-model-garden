@@ -18,7 +18,7 @@ spec:
         working_dir: "https://github.com/ClearFracture/eks-model-garden/archive/refs/heads/add-tool-calling-to-engine-args.zip"
         pip: []
         env_vars:
-          MODEL_ID: "meta-llama/Meta-Llama-3-8B-Instruct"
+          MODEL_ID: "meta-llama/Llama-3.1-8B-Instruct"
           TENSOR_PARALLELISM: "2"
           PIPELINE_PARALLELISM: "1"
           DTYPE: "float16"
