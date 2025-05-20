@@ -232,4 +232,4 @@ model_args = {
 
 # Also export named applications for direct import in RayService config
 chat_model = build_chat_app(model_args)
-# embedding_model = build_embedding_app(model_args)
+embedding_model = build_embedding_app(model_args)
