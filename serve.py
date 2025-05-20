@@ -72,8 +72,8 @@ class VLLMDeployment:
         prompt_adapters: Optional[List[PromptAdapterPath]] = None,
         request_logger: Optional[RequestLogger] = None,
         chat_template: Optional[str] = None,
-        enable_auto_tool_choice: bool = False,
-        tool_call_parser: Optional[str] = None,
+        enable_auto_tools: bool = False,
+        tool_parser: Optional[str] = None,
     ):
         logger.info(f"Starting with engine args: {engine_args}")
         self.openai_serving_chat = None
@@ -83,8 +83,8 @@ class VLLMDeployment:
         self.prompt_adapters = prompt_adapters
         self.request_logger = request_logger
         self.chat_template = chat_template
-        self.enable_auto_tool_choice = enable_auto_tool_choice
-        self.tool_call_parser = tool_call_parser
+        self.enable_auto_tools = enable_auto_tools
+        self.tool_parser = tool_parser
         self.engine = AsyncLLMEngine.from_engine_args(engine_args)
 
     @chat_app.post("/v1/chat/completions")
@@ -122,8 +122,8 @@ class VLLMDeployment:
                 request_logger=self.request_logger,
                 chat_template=self.chat_template,
                 chat_template_content_format="auto",
-                enable_auto_tool_choice=self.enable_auto_tool_choice,
-                tool_call_parser=self.tool_call_parser,
+                enable_auto_tools=self.enable_auto_tools,
+                tool_parser=self.tool_parser,
             )
         logger.info(f"Request: {request}")
         generator = await self.openai_serving_chat.create_chat_completion(
@@ -201,8 +201,8 @@ def build_chat_app(cli_args: Dict[str, str]) -> serve.Application:
         parsed_args.prompt_adapters,
         cli_args.get("request_logger"),
         parsed_args.chat_template,
-        parsed_args.enable_auto_tool_choice, 
-        parsed_args.tool_call_parser
+        parsed_args.enable_auto_tools,
+        parsed_args.tool_parser
     )
 
 
