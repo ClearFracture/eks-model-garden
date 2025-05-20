@@ -120,7 +120,7 @@ class VLLMDeployment:
                 models=models,
                 response_role=self.response_role,
                 request_logger=self.request_logger,
-                chat_template=self.chat_template,
+                # chat_template=self.chat_template,
                 chat_template_content_format="auto",
                 enable_auto_tools=True,
                 tool_parser="llama3_json",
