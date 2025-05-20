@@ -15,7 +15,7 @@ spec:
           num_cpus: 8
           # NOTE: num_gpus is set automatically based on TENSOR_PARALLELISM
       runtime_env:
-        working_dir: "https://github.com/ClearFracture/eks-model-garden/archive/refs/heads/add-tool-calling-to-engine-args.zip"
+        working_dir: "https://github.com/ClearFracture/eks-model-garden/archive/refs/heads/main.zip"
         pip: []
         env_vars:
           MODEL_ID: "meta-llama/Llama-3.1-8B-Instruct"
@@ -33,7 +33,7 @@ spec:
           num_cpus: 8
           # NOTE: num_gpus is set automatically based on TENSOR_PARALLELISM
       runtime_env:
-        working_dir: "https://github.com/ClearFracture/eks-model-garden/archive/refs/heads/add-tool-calling-to-engine-args.zip"
+        working_dir: "https://github.com/ClearFracture/eks-model-garden/archive/refs/heads/main.zip"
         pip: []
         env_vars:
           MODEL_ID: "Linq-AI-Research/Linq-Embed-Mistral"
