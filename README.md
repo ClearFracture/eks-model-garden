@@ -104,7 +104,7 @@ curl http://localhost:8000/v1/chat/completions -H "Content-Type: application/jso
 ### test query for embedding
 ```bash
 curl http://localhost:8000/embed/v1/embeddings -H "Content-Type: application/json" -d '{
-  "model": "intfloat/e5-mistral-7b-instruct",
+  "model": "Linq-AI-Research/Linq-Embed-Mistral",
   "input": "This is a sample text to create embeddings for."
 }'
 ```
