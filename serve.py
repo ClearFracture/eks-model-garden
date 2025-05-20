@@ -85,7 +85,7 @@ class VLLMDeployment:
         # self.chat_template = chat_template
         # self.enable_auto_tools = enable_auto_tools
         # self.tool_parser = tool_parser
-        # self.engine = AsyncLLMEngine.from_engine_args(engine_args)
+        self.engine = AsyncLLMEngine.from_engine_args(engine_args)
 
     @chat_app.post("/v1/chat/completions")
     async def create_chat_completion(
