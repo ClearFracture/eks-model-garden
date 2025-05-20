@@ -82,7 +82,7 @@ class VLLMDeployment:
         self.lora_modules = lora_modules
         self.prompt_adapters = prompt_adapters
         self.request_logger = request_logger
-        self.chat_template = chat_template
+        # self.chat_template = chat_template
         # self.enable_auto_tools = enable_auto_tools
         # self.tool_parser = tool_parser
         # self.engine = AsyncLLMEngine.from_engine_args(engine_args)
