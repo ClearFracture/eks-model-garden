@@ -86,7 +86,7 @@ kubectl port-forward svc/ray-model-garden-serve-svc 8000
 ### test query for chat
 ```bash
 curl http://localhost:8000/v1/chat/completions -H "Content-Type: application/json" -d '{
-      "model": "meta-llama/Meta-Llama-3-8B-Instruct",
+      "model": "meta-llama/Llama-3.1-8B-Instruct",
       "messages": [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Provide a brief sentence describing the Ray open-source project."}
@@ -95,10 +95,16 @@ curl http://localhost:8000/v1/chat/completions -H "Content-Type: application/jso
     }'
 ```
 
+### test query with tool call
+```bash
+curl http://localhost:8000/v1/chat/completions -H "Content-Type: application/json" -d '{"model":"meta-llama/Llama-3.1-8B-Instruct","tools":[{"type":"function","function":{"name":"get_current_weather","description":"Return the current weather for a given city.","parameters":{"type":"object","properties":{"location":{"type":"string","description":"City and state, e.g. Seattle, WA"},"unit":{"type":"string","enum":["celsius","fahrenheit"],"description":"Temperature unit"}},"required":["location"]}}}],"messages":[{"role":"system","content":"You are a helpful weather assistant."},{"role":"user","content":"What'"'"'s the weather in Seattle right now?"}],"tool_choice":"auto","temperature":0.0}'
+```
+
+
 ### test query for embedding
 ```bash
 curl http://localhost:8000/embed/v1/embeddings -H "Content-Type: application/json" -d '{
-  "model": "intfloat/e5-mistral-7b-instruct",
+  "model": "Linq-AI-Research/Linq-Embed-Mistral",
   "input": "This is a sample text to create embeddings for."
 }'
 ```

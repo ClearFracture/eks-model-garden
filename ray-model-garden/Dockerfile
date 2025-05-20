@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir --extra-index-url ${EXTRA_INDEX} \
         torch==${TORCH_VER}
 
 # Then vLLM **without** --no-deps so it can upgrade torch when needed
-RUN pip install --no-cache-dir vllm==0.8.4
+RUN pip install --no-cache-dir vllm==0.8.5.post1
 
 # Install the rest of the packages
 RUN pip install --no-cache-dir \

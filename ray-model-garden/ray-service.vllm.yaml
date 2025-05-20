@@ -18,12 +18,10 @@ spec:
         working_dir: "https://github.com/ClearFracture/eks-model-garden/archive/refs/heads/main.zip"
         pip: []
         env_vars:
-          MODEL_ID: "meta-llama/Meta-Llama-3-8B-Instruct"
+          MODEL_ID: "meta-llama/Llama-3.1-8B-Instruct"
           TENSOR_PARALLELISM: "2"
           PIPELINE_PARALLELISM: "1"
           DTYPE: "float16"
-          ENABLE_AUTO_TOOL_CHOICE: "true"
-          TOOL_CALL_PARSER: "true"
     
     - name: embeddings
       route_prefix: /embed
@@ -38,7 +36,7 @@ spec:
         working_dir: "https://github.com/ClearFracture/eks-model-garden/archive/refs/heads/main.zip"
         pip: []
         env_vars:
-          MODEL_ID: "intfloat/e5-mistral-7b-instruct"
+          MODEL_ID: "Linq-AI-Research/Linq-Embed-Mistral"
           TENSOR_PARALLELISM: "2"
           PIPELINE_PARALLELISM: "1"
           DTYPE: "float16"

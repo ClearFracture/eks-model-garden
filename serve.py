@@ -49,7 +49,12 @@ def parse_vllm_args(cli_args: Dict[str, str]):
     parser = make_arg_parser(arg_parser)
     arg_strings = []
     for key, value in cli_args.items():
-        arg_strings.extend([f"--{key}", str(value)])
+        if isinstance(value, bool) and value:
+            arg_strings.append(f"--{key}")
+        elif isinstance(value, str) and value.lower() == "true":
+            arg_strings.append(f"--{key}")
+        elif value is not None:
+            arg_strings.extend([f"--{key}", str(value)])
     logger.info(arg_strings)
     parsed_args = parser.parse_args(args=arg_strings)
     return parsed_args
@@ -67,6 +72,8 @@ class VLLMDeployment:
         prompt_adapters: Optional[List[PromptAdapterPath]] = None,
         request_logger: Optional[RequestLogger] = None,
         chat_template: Optional[str] = None,
+        # enable_auto_tools: bool = False,
+        # tool_parser: Optional[str] = None,
     ):
         logger.info(f"Starting with engine args: {engine_args}")
         self.openai_serving_chat = None
@@ -76,6 +83,8 @@ class VLLMDeployment:
         self.prompt_adapters = prompt_adapters
         self.request_logger = request_logger
         self.chat_template = chat_template
+        # self.enable_auto_tools = enable_auto_tools
+        # self.tool_parser = tool_parser
         self.engine = AsyncLLMEngine.from_engine_args(engine_args)
 
     @chat_app.post("/v1/chat/completions")
@@ -113,8 +122,9 @@ class VLLMDeployment:
                 request_logger=self.request_logger,
                 chat_template=self.chat_template,
                 chat_template_content_format="auto",
+                enable_auto_tools=True,
+                tool_parser="llama3_json",
             )
-        
         logger.info(f"Request: {request}")
         generator = await self.openai_serving_chat.create_chat_completion(
             request, raw_request
@@ -191,6 +201,8 @@ def build_chat_app(cli_args: Dict[str, str]) -> serve.Application:
         parsed_args.prompt_adapters,
         cli_args.get("request_logger"),
         parsed_args.chat_template,
+        # parsed_args.enable_auto_tools,
+        # parsed_args.tool_parser
     )
 
 
@@ -210,12 +222,13 @@ model_args = {
     "tensor-parallel-size": os.environ['TENSOR_PARALLELISM'], 
     "pipeline-parallel-size": os.environ['PIPELINE_PARALLELISM'],
     "dtype": os.environ.get('DTYPE', 'float16'),
-    "enable-auto-tool-choice": os.environ.get('ENABLE_AUTO_TOOL_CHOICE', 'false').lower() == 'true',
-    "tool-call-parser": os.environ.get('TOOL_CALL_PARSER', 'false').lower() == 'true'
+    "enable_auto_tool": True,
+    "tool_parser": "llama3_json",
+    # "chat-template": "tool_chat_template_llama3.1_json.jinja"
 }
 
 # For backwards compatibility, keep the default 'model' export
-model = build_chat_app(model_args)
+# model = build_chat_app(model_args)
 
 # Also export named applications for direct import in RayService config
 chat_model = build_chat_app(model_args)
