@@ -222,8 +222,8 @@ model_args = {
     "tensor-parallel-size": os.environ['TENSOR_PARALLELISM'], 
     "pipeline-parallel-size": os.environ['PIPELINE_PARALLELISM'],
     "dtype": os.environ.get('DTYPE', 'float16'),
-    "enable-auto-tool": True,
-    "tool-parser": "llama3_json",
+    "enable_auto_tool": True,
+    "tool_parser": "llama3_json",
     # "chat-template": "tool_chat_template_llama3.1_json.jinja"
 }
 
