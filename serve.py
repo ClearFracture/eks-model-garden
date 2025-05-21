@@ -190,7 +190,9 @@ class VLLMEmbeddingDeployment:
 
 def build_chat_app(cli_args: Dict[str, str]) -> serve.Application:
     """Builds the Chat Serve application."""
-    parsed_args = parse_vllm_args(cli_args)
+    temp_cli_args = cli_args.copy()
+    temp_cli_args["max-model-len"] = "30000"
+    parsed_args = parse_vllm_args(temp_cli_args)
     engine_args = AsyncEngineArgs.from_cli_args(parsed_args)
     engine_args.worker_use_ray = True
 
